@@ -6,9 +6,11 @@ import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.exception.AccountNotFoundException;
+import ru.pas_zhukov.exception.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AccountService {
@@ -48,15 +50,17 @@ public class AccountService {
     }
 
     public void withdraw(Account account, Long amount) {
+        if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException();
         account.withdrawMoney(amount);
     }
 
     public void transfer(Account from, Account to, Long amount) {
-
-    }
-
-    public Long getBalance(Account account) {
-        return null;
+        if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException();
+        double coefficient = 1.d;
+        if (!Objects.equals(from.getUserId(), to.getUserId())) coefficient = (1.d - accountProperties.getTransferCommission());
+        from.withdrawMoney(amount);
+        long moneyToDeposit = (long) (amount * coefficient);
+        to.depositMoney(moneyToDeposit);
     }
 
     public void deleteAccount(Account account) {

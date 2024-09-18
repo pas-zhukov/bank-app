@@ -22,7 +22,7 @@ public class AccountProperties {
         return defaultAmount;
     }
 
-    public double getTransferCommission() {
+    public Double getTransferCommission() {
         return transferCommission;
     }
 }

@@ -1,9 +1,11 @@
-package ru.pas_zhukov.entity;
+package ru.pas_zhukov.unit;
 
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.pas_zhukov.entity.User;
+import ru.pas_zhukov.exception.LoginNotUniqueException;
 import ru.pas_zhukov.service.UserService;
 
 import java.util.List;
@@ -47,6 +49,12 @@ public class UserTest {
         IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser());
         User user = context.getBean(UserService.class).getUserById(5);
         assert user.getId() == 5;
+    }
+
+    @Test(expected = LoginNotUniqueException.class)
+    public void userLoginNotUniqueTest() {
+        User user = context.getBean(UserService.class).createUser("user");
+        User user2 = context.getBean(UserService.class).createUser("user");
     }
 
 }
