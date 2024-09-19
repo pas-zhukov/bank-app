@@ -27,3 +27,4 @@ java -jar ./target/bank-app-1.0-SNAPSHOT.jar
 ```
 
 # Пример использования
+![bank-app-sample](https://github.com/user-attachments/assets/75b877c2-f42c-49cb-bad8-837233c40c59)
