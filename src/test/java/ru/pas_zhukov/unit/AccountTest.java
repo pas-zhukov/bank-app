@@ -123,4 +123,13 @@ public class AccountTest {
         assert Objects.equals(account.getMoneyAmount(), defaultAmount);
     }
 
+    @Test
+    public void noBonusMoneyOnSecondAccount() {
+        User user = userService.createUser();
+        Account account2 = accountService.createAccount(user);
+
+        assert user.getAccountList().size() == 2;
+        assert account2.getMoneyAmount() == 0L;
+    }
+
 }

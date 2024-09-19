@@ -21,7 +21,7 @@ public class UserService {
     private final Set<String> userNames = new HashSet<>();
 
     public User createUser(String username) {
-        if (userNames.contains(username)) throw new LoginNotUniqueException();
+        if (userNames.contains(username)) throw new LoginNotUniqueException(username);
         User user = new User(idCounter, username);
         users.put(idCounter, user);
         userNames.add(username);
@@ -36,7 +36,7 @@ public class UserService {
 
     public User getUserById(int id) throws UserNotFoundException {
         if (users.containsKey(id)) return users.get(id);
-        throw new UserNotFoundException();
+        throw new UserNotFoundException(id);
     }
 
     public List<User> getAllUsers() {

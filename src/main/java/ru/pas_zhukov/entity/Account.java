@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class Account {
-    private int id;
-    private int userId;
+    private final int id;
+    private final int userId;
     private Long moneyAmount;
 
     public Account(int id, int userId, Long moneyAmount) {
@@ -37,5 +37,14 @@ public class Account {
 
     public void withdrawMoney(Long moneyAmount) {
         this.moneyAmount -= moneyAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", moneyAmount=" + moneyAmount +
+                '}';
     }
 }

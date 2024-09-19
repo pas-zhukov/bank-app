@@ -50,4 +50,12 @@ public class User {
         return accountList;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", accountList=" + accountList +
+                '}';
+    }
 }

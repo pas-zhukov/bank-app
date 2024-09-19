@@ -42,7 +42,7 @@ public class AccountService {
         for (Account account : accounts) {
             if (account.getId() == id) return account;
         }
-        throw new AccountNotFoundException();
+        throw new AccountNotFoundException(id);
     }
 
     public void deposit(Account account, Long amount) {
@@ -50,12 +50,12 @@ public class AccountService {
     }
 
     public void withdraw(Account account, Long amount) {
-        if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException();
+        if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException(account, amount);
         account.withdrawMoney(amount);
     }
 
     public void transfer(Account from, Account to, Long amount) {
-        if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException();
+        if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException(from, amount);
         double coefficient = 1.d;
         if (!Objects.equals(from.getUserId(), to.getUserId())) coefficient = (1.d - accountProperties.getTransferCommission());
         from.withdrawMoney(amount);
