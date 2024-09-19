@@ -21,8 +21,6 @@ public class OperationsConsoleListener extends Thread {
                 operation.execute();
             } catch (CommandNotFoundException ex) {
                 System.out.println(ex.getMessage());
-            } catch (NullPointerException e) { // if command not implemented!
-                System.out.println("Command found, but not implemented yet");
             }
             Thread.yield();
         }
