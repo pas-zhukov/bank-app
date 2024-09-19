@@ -23,7 +23,7 @@ public class AccountService {
     private int idCounter = 0;
 
     // Volume
-    private List<Account> accounts = new ArrayList<>();
+    private final List<Account> accounts = new ArrayList<>();
 
     public Account createAccount(int userId) {
         Account account = new Account(idCounter, userId,

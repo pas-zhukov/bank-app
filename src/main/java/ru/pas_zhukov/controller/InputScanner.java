@@ -1,10 +1,7 @@
 package ru.pas_zhukov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.pas_zhukov.controller.command.CreateUserCommand;
 import ru.pas_zhukov.exception.CommandNotFoundException;
 import ru.pas_zhukov.exception.LoginNotUniqueException;
 
@@ -13,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import java.nio.CharBuffer;
-
 @Component
 public class InputScanner {
 
-    private Scanner scanner;
+    private final Scanner scanner;
 
     private final Map<ConsoleOperationType, OperationCommand> commands = new HashMap<>();
 

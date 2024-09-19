@@ -11,7 +11,7 @@ import java.util.List;
 @Scope("prototype")
 public class User {
     private final int id;
-    private String login;
+    private final String login;
     private List<Account> accountList = new ArrayList<>();
 
     @Autowired
@@ -40,10 +40,6 @@ public class User {
 
     public String getLogin() {
         return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public List<Account> getAccountList() {
