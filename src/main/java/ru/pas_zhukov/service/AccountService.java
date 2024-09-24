@@ -39,10 +39,10 @@ public class AccountService {
     }
 
     public Account getAccountById(int id) {
-        for (Account account : accounts) {
-            if (account.getId() == id) return account;
-        }
-        throw new AccountNotFoundException(id);
+        return accounts.stream()
+                .filter(account -> account.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new AccountNotFoundException(id));
     }
 
     public void deposit(Account account, Long amount) {
