@@ -6,8 +6,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.AccountNotFoundException;
-import ru.pas_zhukov.exception.NotEnoughMoneyException;
+import ru.pas_zhukov.exception.request.AccountNotFoundException;
+import ru.pas_zhukov.exception.request.NotEnoughMoneyException;
 import ru.pas_zhukov.service.AccountService;
 import ru.pas_zhukov.service.UserService;
 

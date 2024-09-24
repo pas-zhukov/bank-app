@@ -5,9 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pas_zhukov.config.AccountProperties;
-import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.LoginNotUniqueException;
+import ru.pas_zhukov.exception.request.LoginNotUniqueException;
 import ru.pas_zhukov.service.UserService;
 
 import java.util.List;

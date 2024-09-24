@@ -2,8 +2,10 @@ package ru.pas_zhukov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.pas_zhukov.exception.CommandNotFoundException;
-import ru.pas_zhukov.exception.LoginNotUniqueException;
+import ru.pas_zhukov.exception.input.CommandNotFoundException;
+import ru.pas_zhukov.exception.request.LoginNotUniqueException;
+import ru.pas_zhukov.exception.input.WrongIdException;
+import ru.pas_zhukov.exception.input.WrongMoneyAmountException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +39,18 @@ public class InputScanner {
     }
 
     public int parseId() {
-        return Integer.parseInt(scanner.nextLine());
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException ex) {
+            throw new WrongIdException("Please enter a correct integer user ID");
+        }
     }
 
     public Long parseMoneyAmount() {
-        return Long.parseLong(scanner.nextLine());
+        try {
+            return Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException ex) {
+            throw new WrongMoneyAmountException("Please enter correct money amount");
+        }
     }
 }

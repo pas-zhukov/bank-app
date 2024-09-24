@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
-import ru.pas_zhukov.entity.Account;
-import ru.pas_zhukov.exception.AccountNotFoundException;
+import ru.pas_zhukov.exception.request.AccountNotFoundException;
 import ru.pas_zhukov.service.AccountService;
 
 @Component
@@ -22,15 +21,9 @@ public class CloseAccountCommand implements OperationCommand {
     @Override
     public void execute() {
         System.out.println("Please enter id for the account to close:");
-        try {
-            int accountId = inputScanner.parseId();
-            accountService.deleteAccount(accountId);
-            System.out.println("Account was closed.");
-        } catch (AccountNotFoundException ex) {
-            System.out.println(ex.getMessage());
-        } catch (NumberFormatException ex) {
-            System.out.println("Please enter an integer ID");
-        }
+        int accountId = inputScanner.parseId();
+        accountService.deleteAccount(accountId);
+        System.out.println("Account was closed.");
     }
 
     @Override

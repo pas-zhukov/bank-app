@@ -7,7 +7,7 @@ import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.LoginNotUniqueException;
+import ru.pas_zhukov.exception.request.LoginNotUniqueException;
 import ru.pas_zhukov.service.UserService;
 
 @Component
@@ -24,12 +24,8 @@ public class CreateUserCommand implements OperationCommand {
     public void execute() {
         System.out.println("Enter unique username: ");
         String login = inputScanner.parseLogin();
-        try {
-            User user = userService.createUser(login);
-            System.out.println("User created: " + user);
-        } catch (LoginNotUniqueException ex) {
-            System.out.println(ex.getMessage());
-        }
+        User user = userService.createUser(login);
+        System.out.println("User created: " + user);
     }
 
     @Override

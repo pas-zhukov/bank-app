@@ -3,8 +3,8 @@ package ru.pas_zhukov.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.LoginNotUniqueException;
-import ru.pas_zhukov.exception.UserNotFoundException;
+import ru.pas_zhukov.exception.request.LoginNotUniqueException;
+import ru.pas_zhukov.exception.request.UserNotFoundException;
 
 import java.util.*;
 

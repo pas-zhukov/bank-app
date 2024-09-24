@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.AccountNotFoundException;
-import ru.pas_zhukov.exception.NotEnoughMoneyException;
+import ru.pas_zhukov.exception.request.AccountNotFoundException;
+import ru.pas_zhukov.exception.request.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
