@@ -23,15 +23,11 @@ public class WithdrawAccountCommand implements OperationCommand {
     @Override
     public void execute() {
 
-        Account account;
+        int accountId;
 
         System.out.println("Please enter id for the account to withdraw from:");
         try {
-            int accountId = inputScanner.parseId();
-            account = accountService.getAccountById(accountId);
-        } catch (AccountNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return;
+            accountId = inputScanner.parseId();
         } catch (NumberFormatException ex) {
             System.out.println("Please enter an integer ID");
             return;
@@ -40,9 +36,9 @@ public class WithdrawAccountCommand implements OperationCommand {
         System.out.println("Please enter amount to withdraw:");
         try {
             Long moneyAmount = inputScanner.parseMoneyAmount();
-            accountService.withdraw(account, moneyAmount);
+            accountService.withdraw(accountId, moneyAmount);
             System.out.println("Withdraw successful");
-        } catch (NotEnoughMoneyException ex) {
+        } catch (NotEnoughMoneyException | AccountNotFoundException ex) {
             System.out.println(ex.getMessage());
         } catch (NumberFormatException ex) {
             System.out.println("Please enter correct money amount");

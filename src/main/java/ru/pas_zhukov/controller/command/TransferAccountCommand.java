@@ -23,41 +23,33 @@ public class TransferAccountCommand implements OperationCommand {
     @Override
     public void execute() {
 
-        Account account;
-        Account account2;
+        int accountIdFrom;
+        int accountIdTo;
 
         System.out.println("Please enter id for the account to withdraw from:");
         try {
-            int accountId = inputScanner.parseId();
-            account = accountService.getAccountById(accountId);
-        } catch (AccountNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return;
+            accountIdFrom = inputScanner.parseId();
         } catch (NumberFormatException ex) {
-            System.out.println("Please enter an integer ID");
+            System.out.println("Please enter an integer user ID");
             return;
         }
 
-        System.out.println("Please enter id for the account to deposit:");
+        System.out.println("Please enter id for the account to deposit to:");
         try {
-            int accountId = inputScanner.parseId();
-            account2 = accountService.getAccountById(accountId);
-        } catch (AccountNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return;
+            accountIdTo = inputScanner.parseId();
         } catch (NumberFormatException ex) {
-            System.out.println("Please enter an integer ID");
+            System.out.println("Please enter an integer user ID");
             return;
         }
 
         System.out.println("Please enter amount to transfer:");
         try {
             Long moneyAmount = inputScanner.parseMoneyAmount();
-            accountService.transfer(account, account2, moneyAmount);
+            accountService.transfer(accountIdFrom, accountIdTo, moneyAmount);
             System.out.println("Transfer successful");
         } catch (NumberFormatException ex) {
             System.out.println("Please enter correct money amount");
-        } catch (NotEnoughMoneyException ex) {
+        } catch (NotEnoughMoneyException | AccountNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
     }

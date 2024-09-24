@@ -28,8 +28,7 @@ public class CreateAccountCommand implements OperationCommand {
         System.out.println("Please enter user id for whom to create account:");
         try {
             int userId = inputScanner.parseId();
-            User user = userService.getUserById(userId);
-            Account account = accountService.createAccount(user);
+            Account account = accountService.createAccount(userId);
             System.out.println("Account created: " + account);
         } catch (UserNotFoundException ex) {
             System.out.println(ex.getMessage());

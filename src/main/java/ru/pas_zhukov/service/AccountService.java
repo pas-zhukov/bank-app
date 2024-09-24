@@ -48,11 +48,20 @@ public class AccountService {
     public void deposit(Account account, Long amount) {
         account.depositMoney(amount);
     }
+    public void deposit(int accountId, Long amount) {
+        Account account = getAccountById(accountId);
+        deposit(account, amount);
+    }
 
     public void withdraw(Account account, Long amount) {
         if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException(account, amount);
         account.withdrawMoney(amount);
     }
+    public void withdraw(int accountId, Long amount) {
+        Account account = getAccountById(accountId);
+        withdraw(account, amount);
+    }
+
 
     public void transfer(Account from, Account to, Long amount) {
         if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException(from, amount);
@@ -62,9 +71,19 @@ public class AccountService {
         long moneyToDeposit = (long) (amount * coefficient);
         to.depositMoney(moneyToDeposit);
     }
+    public void transfer(int fromId, int toId, Long amount) {
+        Account from = getAccountById(fromId);
+        Account to = getAccountById(toId);
+        transfer(from, to, amount);
+    }
+
 
     public void deleteAccount(Account account) {
         userService.getUserById(account.getUserId()).removeAccount(account);
         accounts.remove(account);
+    }
+    public void deleteAccount(int accountId) {
+        Account account = getAccountById(accountId);
+        deleteAccount(account);
     }
 }

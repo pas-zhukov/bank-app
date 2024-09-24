@@ -30,7 +30,6 @@ public class InputScanner {
         } catch (IllegalArgumentException e) {
             throw new CommandNotFoundException(input);
         }
-
     }
 
     public String parseLogin() throws LoginNotUniqueException {

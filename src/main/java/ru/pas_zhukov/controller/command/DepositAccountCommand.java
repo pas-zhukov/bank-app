@@ -22,27 +22,25 @@ public class DepositAccountCommand implements OperationCommand {
     @Override
     public void execute() {
 
-        Account account;
+        int accountId;
 
         System.out.println("Please enter id for the account to deposit:");
         try {
-            int accountId = inputScanner.parseId();
-            account = accountService.getAccountById(accountId);
-        } catch (AccountNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return;
-        } catch (NumberFormatException ex) {
-            System.out.println("Please enter an integer ID");
+            accountId = inputScanner.parseId();
+        }  catch (NumberFormatException ex) {
+            System.out.println("Please enter an integer user ID");
             return;
         }
 
         System.out.println("Please enter amount to deposit:");
         try {
             Long moneyAmount = inputScanner.parseMoneyAmount();
-            accountService.deposit(account, moneyAmount);
+            accountService.deposit(accountId, moneyAmount);
             System.out.println("Deposit successful");
         } catch (NumberFormatException ex) {
             System.out.println("Please enter correct money amount");
+        } catch (AccountNotFoundException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 

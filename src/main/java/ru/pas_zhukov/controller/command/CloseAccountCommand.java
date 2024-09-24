@@ -24,8 +24,7 @@ public class CloseAccountCommand implements OperationCommand {
         System.out.println("Please enter id for the account to close:");
         try {
             int accountId = inputScanner.parseId();
-            Account account = accountService.getAccountById(accountId);
-            accountService.deleteAccount(account);
+            accountService.deleteAccount(accountId);
             System.out.println("Account was closed.");
         } catch (AccountNotFoundException ex) {
             System.out.println(ex.getMessage());
