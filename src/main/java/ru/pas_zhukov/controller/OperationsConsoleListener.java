@@ -24,7 +24,6 @@ public class OperationsConsoleListener extends Thread {
             } catch (BankAppInputException | BankAppRequestException ex) {
                 System.out.println(ex.getMessage());
             }
-            Thread.yield();
         }
     }
 }
