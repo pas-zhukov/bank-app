@@ -1,20 +1,15 @@
 package ru.pas_zhukov.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@Scope("prototype")
+
 public class User {
     private final int id;
     private final String login;
     private List<Account> accountList = new ArrayList<>();
 
-    @Autowired
+
     public User(int id, String login) {
         this.id = id;
         this.login = login;
