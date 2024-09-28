@@ -1,6 +1,7 @@
 package ru.pas_zhukov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.exception.request.LoginNotUniqueException;
@@ -19,6 +20,7 @@ public class UserService {
     private final Map<Integer, User> users = new HashMap<>();
     private final Set<String> userNames = new HashSet<>();
 
+    @Lazy // временное решение этапа без БД
     public UserService(AccountService accountService) {
         this.accountService = accountService;
     }
