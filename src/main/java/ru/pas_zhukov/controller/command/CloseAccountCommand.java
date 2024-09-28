@@ -8,16 +8,17 @@ import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
 import ru.pas_zhukov.exception.request.AccountNotFoundException;
 import ru.pas_zhukov.service.AccountService;
+import ru.pas_zhukov.service.UserService;
 
 @Component
 public class CloseAccountCommand implements OperationCommand {
 
-    private final AccountService accountService;
+    private final UserService userService;
     @Lazy
     private final InputScanner inputScanner;
 
-    public CloseAccountCommand(AccountService accountService, InputScanner inputScanner) {
-        this.accountService = accountService;
+    public CloseAccountCommand(UserService userService, InputScanner inputScanner) {
+        this.userService = userService;
         this.inputScanner = inputScanner;
     }
 
@@ -25,7 +26,7 @@ public class CloseAccountCommand implements OperationCommand {
     public void execute() {
         System.out.println("Please enter id for the account to close:");
         int accountId = inputScanner.parseId();
-        accountService.deleteAccount(accountId);
+        userService.deleteAccount(accountId);
         System.out.println("Account was closed.");
     }
 

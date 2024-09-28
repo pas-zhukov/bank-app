@@ -1,5 +1,7 @@
 package ru.pas_zhukov.entity;
 
+import ru.pas_zhukov.exception.request.AccountNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,10 @@ public class User {
 
     public void removeAccount(Account account) {
         accountList.remove(account);
+    }
+
+    public void removeAccount(Integer accountId) {
+        accountList.removeIf(account -> accountId.equals(account.getId()));
     }
 
     public Integer getId() {
