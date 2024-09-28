@@ -1,7 +1,6 @@
 package ru.pas_zhukov.controller;
 
 import org.springframework.stereotype.Component;
-import ru.pas_zhukov.exception.CommandNotFoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public class OperationsConsoleListener extends Thread {
                 String input = inputScanner.parseString().toUpperCase();
                 OperationCommand operation = getCommand(input);
                 operation.execute();
-            } catch (IllegalArgumentException | CommandNotFoundException ex) {
+            } catch (IllegalArgumentException ex) {
                 System.out.print(ex.getMessage());
             }
         }
@@ -37,7 +36,7 @@ public class OperationsConsoleListener extends Thread {
         try {
             return commands.get(ConsoleOperationType.valueOf(input));
         } catch (IllegalArgumentException e) {
-            throw new CommandNotFoundException(input);
+            throw new IllegalArgumentException("Command not found: " + input);
         }
     }
 }
