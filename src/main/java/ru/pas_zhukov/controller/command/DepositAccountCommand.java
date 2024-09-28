@@ -12,11 +12,14 @@ import ru.pas_zhukov.service.AccountService;
 @Component
 public class DepositAccountCommand implements OperationCommand {
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
+    private final AccountService accountService;
     @Lazy
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public DepositAccountCommand(AccountService accountService, InputScanner inputScanner) {
+        this.accountService = accountService;
+        this.inputScanner = inputScanner;
+    }
 
     @Override
     public void execute() {

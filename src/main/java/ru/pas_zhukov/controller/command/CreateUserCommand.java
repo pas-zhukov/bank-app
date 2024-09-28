@@ -13,12 +13,15 @@ import ru.pas_zhukov.service.UserService;
 @Component
 public class CreateUserCommand implements OperationCommand {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
     @Lazy
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public CreateUserCommand(UserService userService, InputScanner inputScanner) {
+        this.userService = userService;
+        this.inputScanner = inputScanner;
+    }
 
     @Override
     public void execute() {

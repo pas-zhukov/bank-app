@@ -6,18 +6,19 @@ import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
-import ru.pas_zhukov.exception.request.AccountNotFoundException;
-import ru.pas_zhukov.exception.request.NotEnoughMoneyException;
 import ru.pas_zhukov.service.AccountService;
 
 @Component
 public class TransferAccountCommand implements OperationCommand {
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
+    private final AccountService accountService;
     @Lazy
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public TransferAccountCommand(AccountService accountService, InputScanner inputScanner) {
+        this.accountService = accountService;
+        this.inputScanner = inputScanner;
+    }
 
     @Override
     public void execute() {

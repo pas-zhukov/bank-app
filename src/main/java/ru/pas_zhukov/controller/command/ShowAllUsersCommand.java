@@ -9,8 +9,11 @@ import ru.pas_zhukov.service.UserService;
 @Component
 public class ShowAllUsersCommand implements OperationCommand {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public ShowAllUsersCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void execute() {

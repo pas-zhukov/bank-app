@@ -11,14 +11,17 @@ import java.util.*;
 @Component
 public class UserService {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
     private int idCounter = 0;
 
     // Volume
     private final Map<Integer, User> users = new HashMap<>();
     private final Set<String> userNames = new HashSet<>();
+
+    public UserService(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     public User createUser(String username) {
         if (userNames.contains(username)) throw new LoginNotUniqueException(username);

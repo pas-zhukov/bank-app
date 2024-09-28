@@ -4,14 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.exception.BankAppInputException;
 import ru.pas_zhukov.exception.BankAppRequestException;
-import ru.pas_zhukov.exception.input.CommandNotFoundException;
 
 import java.util.Arrays;
 
 @Component
 public class OperationsConsoleListener extends Thread {
-    @Autowired
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public OperationsConsoleListener(InputScanner inputScanner) {
+        this.inputScanner = inputScanner;
+    }
 
     public void run(){
         while (true){

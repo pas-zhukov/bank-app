@@ -14,13 +14,14 @@ import ru.pas_zhukov.service.UserService;
 @Component
 public class CreateAccountCommand implements OperationCommand {
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private UserService userService;
-    @Autowired
+    private final AccountService accountService;
     @Lazy
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public CreateAccountCommand(AccountService accountService, InputScanner inputScanner) {
+        this.accountService = accountService;
+        this.inputScanner = inputScanner;
+    }
 
     @Override
     public void execute() {

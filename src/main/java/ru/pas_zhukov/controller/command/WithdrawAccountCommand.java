@@ -13,11 +13,14 @@ import ru.pas_zhukov.service.AccountService;
 @Component
 public class WithdrawAccountCommand implements OperationCommand {
 
-    @Autowired
-    private AccountService accountService;
-    @Autowired
+    private final AccountService accountService;
     @Lazy
-    private InputScanner inputScanner;
+    private final InputScanner inputScanner;
+
+    public WithdrawAccountCommand(AccountService accountService, InputScanner inputScanner) {
+        this.accountService = accountService;
+        this.inputScanner = inputScanner;
+    }
 
     @Override
     public void execute() {

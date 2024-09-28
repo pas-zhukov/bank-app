@@ -15,15 +15,18 @@ import java.util.Objects;
 @Component
 public class AccountService {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private AccountProperties accountProperties;
+    private final UserService userService;
+    private final AccountProperties accountProperties;
 
     private int idCounter = 0;
 
     // Volume
     private final List<Account> accounts = new ArrayList<>();
+
+    public AccountService(UserService userService, AccountProperties accountProperties) {
+        this.userService = userService;
+        this.accountProperties = accountProperties;
+    }
 
     public Account createAccount(int userId) {
         Account account = new Account(idCounter, userId,
