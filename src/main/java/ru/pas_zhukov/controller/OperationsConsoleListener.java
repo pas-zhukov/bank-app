@@ -1,9 +1,7 @@
 package ru.pas_zhukov.controller;
 
 import org.springframework.stereotype.Component;
-import ru.pas_zhukov.exception.BankAppInputException;
-import ru.pas_zhukov.exception.BankAppRequestException;
-import ru.pas_zhukov.exception.input.CommandNotFoundException;
+import ru.pas_zhukov.exception.CommandNotFoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,8 +27,8 @@ public class OperationsConsoleListener extends Thread {
                 String input = inputScanner.parseString().toUpperCase();
                 OperationCommand operation = getCommand(input);
                 operation.execute();
-            } catch (BankAppInputException | BankAppRequestException ex) { // TODO: обработать все ошибки разные
-                System.out.println(ex.getMessage());
+            } catch (IllegalArgumentException | CommandNotFoundException ex) {
+                System.out.print(ex.getMessage());
             }
         }
     }

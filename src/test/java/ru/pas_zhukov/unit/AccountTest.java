@@ -6,8 +6,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.request.AccountNotFoundException;
-import ru.pas_zhukov.exception.request.NotEnoughMoneyException;
 import ru.pas_zhukov.service.AccountService;
 import ru.pas_zhukov.service.UserService;
 
@@ -51,7 +49,7 @@ public class AccountTest {
         assert user.getAccountList().get(0) == account;
     }
 
-    @Test(expected = AccountNotFoundException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void accountDeletionTest() {
         User user = userService.createUser();
         Account account = user.getAccountList().get(0);
@@ -86,7 +84,7 @@ public class AccountTest {
         assert Objects.equals(account.getMoneyAmount(), defaultAmount);
     }
 
-    @Test(expected = NotEnoughMoneyException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void accountWithdrawalExceptionTest() {
         User user = userService.createUser();
         Account account = user.getAccountList().get(0);

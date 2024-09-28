@@ -1,13 +1,11 @@
 package ru.pas_zhukov.controller.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.request.LoginNotUniqueException;
 import ru.pas_zhukov.service.UserService;
 
 @Component

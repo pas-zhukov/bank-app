@@ -1,12 +1,9 @@
 package ru.pas_zhukov.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.request.AccountNotFoundException;
-import ru.pas_zhukov.exception.request.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +42,25 @@ public class AccountService {
         return accounts.stream()
                 .filter(account -> account.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new AccountNotFoundException(id));
+                .orElseThrow(() -> new IllegalArgumentException("Account with id " + id + " not found"));
     }
 
     public void deposit(Account account, Long amount) {
         account.depositMoney(amount);
     }
+
     public void deposit(int accountId, Long amount) {
         Account account = getAccountById(accountId);
         deposit(account, amount);
     }
 
     public void withdraw(Account account, Long amount) {
-        if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException(account, amount);
+        if (account.getMoneyAmount() < amount) {
+            throwNotEnoughMoneyException(account, amount);
+        }
         account.withdrawMoney(amount);
     }
+
     public void withdraw(int accountId, Long amount) {
         Account account = getAccountById(accountId);
         withdraw(account, amount);
@@ -67,13 +68,18 @@ public class AccountService {
 
 
     public void transfer(Account from, Account to, Long amount) {
-        if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException(from, amount);
+        if (from.getMoneyAmount() < amount) {
+            throwNotEnoughMoneyException(from, amount);
+        }
         double coefficient = 1.d;
-        if (!Objects.equals(from.getUserId(), to.getUserId())) coefficient = (1.d - accountProperties.getTransferCommission());
+        if (!Objects.equals(from.getUserId(), to.getUserId())) {
+            coefficient = (1.d - accountProperties.getTransferCommission());
+        }
         from.withdrawMoney(amount);
         long moneyToDeposit = (long) (amount * coefficient);
         to.depositMoney(moneyToDeposit);
     }
+
     public void transfer(int fromId, int toId, Long amount) {
         Account from = getAccountById(fromId);
         Account to = getAccountById(toId);
@@ -85,8 +91,15 @@ public class AccountService {
         userService.getUserById(account.getUserId()).removeAccount(account);
         accounts.remove(account);
     }
+
     public void deleteAccount(int accountId) {
         Account account = getAccountById(accountId);
         deleteAccount(account);
+    }
+
+    private void throwNotEnoughMoneyException(Account account, Long amount) {
+        throw new IllegalArgumentException("Not enough money on account with id " + account.getId() + ". " +
+                "You requested " + amount + ", " +
+                "but there is only " + account.getMoneyAmount() + " on account.");
     }
 }

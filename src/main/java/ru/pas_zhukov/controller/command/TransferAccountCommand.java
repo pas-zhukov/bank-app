@@ -1,6 +1,5 @@
 package ru.pas_zhukov.controller.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
@@ -26,12 +25,12 @@ public class TransferAccountCommand implements OperationCommand {
         int accountIdTo;
 
         System.out.println("Please enter id for the account to withdraw from:");
-        accountIdFrom = inputScanner.parseId();
+        accountIdFrom = inputScanner.parseInteger();
         System.out.println("Please enter id for the account to deposit to:");
-        accountIdTo = inputScanner.parseId();
+        accountIdTo = inputScanner.parseInteger();
 
         System.out.println("Please enter amount to transfer:");
-        Long moneyAmount = inputScanner.parseMoneyAmount();
+        Long moneyAmount = inputScanner.parseLong();
         accountService.transfer(accountIdFrom, accountIdTo, moneyAmount);
         System.out.println("Transfer successful");
     }

@@ -11,18 +11,25 @@ public class InputScanner {
 
     public InputScanner() {
         scanner = new Scanner(System.in);
-
     }
 
     public String parseString() {
         return scanner.nextLine();
     }
 
-    public int parseId() throws NumberFormatException{
-        return Integer.parseInt(scanner.nextLine());
+    public int parseInteger() throws IllegalArgumentException {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Please enter Integer value.");
+        }
     }
 
-    public Long parseMoneyAmount() throws NumberFormatException{
-        return Long.parseLong(scanner.nextLine());
+    public Long parseLong() throws IllegalArgumentException {
+        try {
+            return Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Please enter Long value.");
+        }
     }
 }

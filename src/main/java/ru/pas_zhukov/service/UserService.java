@@ -1,11 +1,8 @@
 package ru.pas_zhukov.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.request.LoginNotUniqueException;
-import ru.pas_zhukov.exception.request.UserNotFoundException;
 
 import java.util.*;
 
@@ -26,7 +23,9 @@ public class UserService {
     }
 
     public User createUser(String username) {
-        if (userNames.contains(username)) throw new LoginNotUniqueException(username);
+        if (userNames.contains(username)) {
+            throw new IllegalArgumentException("User with login " + username + " already exists. Please choose another username.");
+        }
         User user = new User(idCounter, username);
         users.put(idCounter, user);
         userNames.add(username);
@@ -39,9 +38,11 @@ public class UserService {
         return createUser("User" + idCounter);
     }
 
-    public User getUserById(int id) throws UserNotFoundException {
-        if (users.containsKey(id)) return users.get(id);
-        throw new UserNotFoundException(id);
+    public User getUserById(int id) throws IllegalArgumentException {
+        if (users.containsKey(id)) {
+            return users.get(id);
+        }
+        throw new IllegalArgumentException("User with id " + id + " not found");
     }
 
     public List<User> getAllUsers() {

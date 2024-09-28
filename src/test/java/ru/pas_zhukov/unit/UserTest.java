@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.User;
-import ru.pas_zhukov.exception.request.LoginNotUniqueException;
 import ru.pas_zhukov.service.UserService;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public class UserTest {
         assert user.getId() == 5;
     }
 
-    @Test(expected = LoginNotUniqueException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void userLoginNotUniqueTest() {
         User user = context.getBean(UserService.class).createUser("user");
         User user2 = context.getBean(UserService.class).createUser("user");
