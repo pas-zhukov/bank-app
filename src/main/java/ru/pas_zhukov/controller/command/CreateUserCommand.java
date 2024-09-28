@@ -26,7 +26,7 @@ public class CreateUserCommand implements OperationCommand {
     @Override
     public void execute() {
         System.out.println("Enter unique username: ");
-        String login = inputScanner.parseLogin();
+        String login = inputScanner.parseString();
         User user = userService.createUser(login);
         System.out.println("User created: " + user);
     }
