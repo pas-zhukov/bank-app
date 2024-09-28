@@ -1,6 +1,5 @@
 package ru.pas_zhukov.controller.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.OperationCommand;

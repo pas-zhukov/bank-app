@@ -1,6 +1,5 @@
 package ru.pas_zhukov.controller.command;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
@@ -13,7 +12,6 @@ public class CreateUserCommand implements OperationCommand {
 
     private final UserService userService;
 
-    @Lazy
     private final InputScanner inputScanner;
 
     public CreateUserCommand(UserService userService, InputScanner inputScanner) {

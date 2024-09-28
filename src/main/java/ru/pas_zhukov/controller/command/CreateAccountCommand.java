@@ -1,6 +1,5 @@
 package ru.pas_zhukov.controller.command;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.controller.ConsoleOperationType;
 import ru.pas_zhukov.controller.InputScanner;
@@ -12,7 +11,7 @@ import ru.pas_zhukov.service.AccountService;
 public class CreateAccountCommand implements OperationCommand {
 
     private final AccountService accountService;
-    @Lazy
+
     private final InputScanner inputScanner;
 
     public CreateAccountCommand(AccountService accountService, InputScanner inputScanner) {
