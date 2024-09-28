@@ -15,6 +15,7 @@ import java.util.Objects;
 @Component
 public class AccountService {
 
+    private final UserService userService;
     private final AccountProperties accountProperties;
 
     private int idCounter = 0;
@@ -22,14 +23,17 @@ public class AccountService {
     // Volume
     private final List<Account> accounts = new ArrayList<>();
 
-    public AccountService(AccountProperties accountProperties) {
+    public AccountService(UserService userService, AccountProperties accountProperties) {
+        this.userService = userService;
         this.accountProperties = accountProperties;
     }
 
     public Account createAccount(int userId) {
-        Account account = new Account(idCounter, userId, accountProperties.getDefaultAmount());
+        Account account = new Account(idCounter, userId,
+                userService.getUserById(userId).getAccountList().isEmpty() ? accountProperties.getDefaultAmount() : 0);
         idCounter++;
         accounts.add(account);
+        userService.getUserById(userId).addAccount(account);
         return account;
     }
 
@@ -47,7 +51,6 @@ public class AccountService {
     public void deposit(Account account, Long amount) {
         account.depositMoney(amount);
     }
-
     public void deposit(int accountId, Long amount) {
         Account account = getAccountById(accountId);
         deposit(account, amount);
@@ -57,11 +60,11 @@ public class AccountService {
         if (account.getMoneyAmount() < amount) throw new NotEnoughMoneyException(account, amount);
         account.withdrawMoney(amount);
     }
-
     public void withdraw(int accountId, Long amount) {
         Account account = getAccountById(accountId);
         withdraw(account, amount);
     }
+
 
     public void transfer(Account from, Account to, Long amount) {
         if (from.getMoneyAmount() < amount) throw new NotEnoughMoneyException(from, amount);
@@ -71,17 +74,17 @@ public class AccountService {
         long moneyToDeposit = (long) (amount * coefficient);
         to.depositMoney(moneyToDeposit);
     }
-
     public void transfer(int fromId, int toId, Long amount) {
         Account from = getAccountById(fromId);
         Account to = getAccountById(toId);
         transfer(from, to, amount);
     }
 
+
     public void deleteAccount(Account account) {
+        userService.getUserById(account.getUserId()).removeAccount(account);
         accounts.remove(account);
     }
-
     public void deleteAccount(int accountId) {
         Account account = getAccountById(accountId);
         deleteAccount(account);

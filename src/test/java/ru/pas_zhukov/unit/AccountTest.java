@@ -57,7 +57,7 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         int accountId = account.getId();
 
-        userService.deleteAccount(account);
+        accountService.deleteAccount(account);
 
         assert user.getAccountList().isEmpty();
         Account deletedAccount = accountService.getAccountById(accountId);
