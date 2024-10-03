@@ -6,16 +6,18 @@ import ru.pas_zhukov.controller.InputScanner;
 import ru.pas_zhukov.controller.OperationCommand;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.service.AccountService;
+import ru.pas_zhukov.service.UserService;
 
 @Component
 public class CreateAccountCommand implements OperationCommand {
 
     private final AccountService accountService;
-
+    private final UserService userService;
     private final InputScanner inputScanner;
 
-    public CreateAccountCommand(AccountService accountService, InputScanner inputScanner) {
+    public CreateAccountCommand(AccountService accountService, UserService userService, InputScanner inputScanner) {
         this.accountService = accountService;
+        this.userService = userService;
         this.inputScanner = inputScanner;
     }
 
@@ -23,7 +25,7 @@ public class CreateAccountCommand implements OperationCommand {
     public void execute() {
         System.out.println("Please enter user id for whom to create account:");
         int userId = inputScanner.parseInteger();
-        Account account = accountService.createAccount(userId);
+        Account account = accountService.createAccount(userService.getUserById(userId));
         System.out.println("Account created: " + account);
     }
 

@@ -1,5 +1,6 @@
 package ru.pas_zhukov.service;
 
+import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -25,14 +26,6 @@ public class AccountService {
         this.sessionFactory = sessionFactory;
     }
 
-    public Account createAccount(int userId) {
-        User user;
-        try (Session session = sessionFactory.getCurrentSession()) { // TODO: лучше бы вызывать сервис...
-            user = session.get(User.class, userId);
-        }
-        return createAccount(user);
-    }
-
     public Account createAccount(User user) {
         return transactionHelper.executeInTransaction(() -> {
             Session session = sessionFactory.getCurrentSession();
@@ -44,34 +37,52 @@ public class AccountService {
     }
 
     public Account getAccountById(int id) {
-           Session session = sessionFactory.getCurrentSession();
-            return session.get(Account.class, id);
-//                new IllegalArgumentException("Account with id " + id + " not found"));
+        return transactionHelper.executeInTransaction(() -> {
+            try {
+                Session session = sessionFactory.getCurrentSession();
+                return session.createQuery("SELECT a FROM Account a WHERE a.id=:id", Account.class).setParameter("id", id).getSingleResult();
+            } catch (NoResultException e) {
+                throw new IllegalArgumentException("Account with id " + id + " not found");
+            }
+        });
     }
 
     public void deposit(Account account, Long amount) {
-        account.depositMoney(amount);
+        transactionHelper.executeInTransaction(() -> {
+            account.depositMoney(amount);
+            return 0;
+        });
     }
 
     public void deposit(int accountId, Long amount) {
-        Account account = getAccountById(accountId);
-        deposit(account, amount);
+        transactionHelper.executeInTransaction(() -> {
+            Account account = getAccountById(accountId);
+            deposit(account, amount);
+            return 0;
+        });
     }
 
     public void withdraw(Account account, Long amount) {
-        if (account.getMoneyAmount() < amount) {
-            throwNotEnoughMoneyException(account, amount);
-        }
-        account.withdrawMoney(amount);
+        transactionHelper.executeInTransaction(() -> {
+            if (account.getMoneyAmount() < amount) {
+                throwNotEnoughMoneyException(account, amount);
+            }
+            account.withdrawMoney(amount);
+            return 0;
+        });
     }
 
     public void withdraw(int accountId, Long amount) {
-        Account account = getAccountById(accountId);
-        withdraw(account, amount);
+        transactionHelper.executeInTransaction(() -> {
+            Account account = getAccountById(accountId);
+            withdraw(account, amount);
+            return 0;
+        });
     }
 
 
     public void transfer(Account from, Account to, Long amount) {
+        transactionHelper.executeInTransaction(() -> {
         if (from.getMoneyAmount() < amount) {
             throwNotEnoughMoneyException(from, amount);
         }
@@ -82,26 +93,27 @@ public class AccountService {
         from.withdrawMoney(amount);
         long moneyToDeposit = (long) (amount * coefficient);
         to.depositMoney(moneyToDeposit);
-    }
-
-    public void transfer(int fromId, int toId, Long amount) {
-        Account from = getAccountById(fromId);
-        Account to = getAccountById(toId);
-        transfer(from, to, amount);
-    }
-
-
-    public void deleteAccount(Account account) {
-        Session session = sessionFactory.getCurrentSession();
-        transactionHelper.executeInTransaction(() -> {
-            session.remove(account);
-            return account;
+        return 0;
         });
     }
 
+    public void transfer(int fromId, int toId, Long amount) {
+        transactionHelper.executeInTransaction(() -> {
+            Account from = getAccountById(fromId);
+            Account to = getAccountById(toId);
+            transfer(from, to, amount);
+            return 0;
+        });
+    }
+
+
     public void deleteAccount(int accountId) {
-        Account account = getAccountById(accountId);
-        deleteAccount(account);
+        transactionHelper.executeInTransaction(() -> {
+            Session session = sessionFactory.getCurrentSession();
+            Account accountToDelete = getAccountById(accountId);
+            session.createQuery("DELETE FROM Account a WHERE a.id=:id", Void.class).setParameter("id", accountId).executeUpdate();
+            return 0;
+        });
     }
 
     private void throwNotEnoughMoneyException(Account account, Long amount) {

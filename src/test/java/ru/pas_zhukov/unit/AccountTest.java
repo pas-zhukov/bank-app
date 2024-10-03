@@ -1,5 +1,6 @@
 package ru.pas_zhukov.unit;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import ru.pas_zhukov.service.AccountService;
 import ru.pas_zhukov.service.UserService;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class AccountTest {
 
@@ -56,9 +58,10 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         int accountId = account.getId();
 
-        accountService.deleteAccount(account);
+        accountService.deleteAccount(accountId);
+        user = userService.getUserById(user.getId());
 
-        assert user.getAccountList().isEmpty();
+        Assert.assertTrue(user.getAccountList().isEmpty());
         Account deletedAccount = accountService.getAccountById(accountId);
     }
 
@@ -126,9 +129,16 @@ public class AccountTest {
     public void noBonusMoneyOnSecondAccount() {
         User user = userService.createUser("111");
         Account account2 = accountService.createAccount(user);
+        user = userService.getUserById(user.getId()); // ?
+        Assert.assertEquals(2, user.getAccountList().size());
+        Assert.assertEquals(Long.valueOf(0L), account2.getMoneyAmount());
+    }
 
-        assert user.getAccountList().size() == 2;
-        assert account2.getMoneyAmount() == 0L;
+    @Test
+    public void getAccountById() {
+        User user = userService.createUser("1213");
+        Account account = accountService.getAccountById(user.getAccountList().get(0).getId());
+        Assert.assertNotNull(account);
     }
 
 }

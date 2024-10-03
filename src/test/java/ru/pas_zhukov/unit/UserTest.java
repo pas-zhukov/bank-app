@@ -38,7 +38,7 @@ public class UserTest {
 
     @Test
     public void usersHaveUniqueIdTest() {
-        IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser("2"));
+        IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser("user" + e));
         List<User> users = context.getBean(UserService.class).getAllUsers();
         Set<Integer> ids = users.stream().map(User::getId).collect(Collectors.toSet());
         assert ids.size() == 10;
@@ -69,6 +69,11 @@ public class UserTest {
         User user = context.getBean(UserService.class).createUser("15");
         assert user.getAccountList().size() == 1;
         assert Objects.equals(user.getAccountList().get(0).getMoneyAmount(), defaultAmount);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void notExistingUserTest() {
+        context.getBean(UserService.class).getUserById(9999);
     }
 
 }

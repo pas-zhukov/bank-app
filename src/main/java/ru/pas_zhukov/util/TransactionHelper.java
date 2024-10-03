@@ -6,8 +6,6 @@ import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Component
@@ -38,6 +36,5 @@ public class TransactionHelper {
         } finally {
             session.close();
         }
-
     }
 }
