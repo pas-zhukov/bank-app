@@ -2,6 +2,7 @@ package ru.pas_zhukov.unit;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
@@ -34,7 +35,7 @@ public class AccountTest {
 
     @Test
     public void accountCreationTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("2");
         Account account = user.getAccountList().get(0);
 
         assert account!= null;
@@ -43,7 +44,7 @@ public class AccountTest {
         assert account.getMoneyAmount() != null;
 
         assert Objects.equals(account.getUserId(), user.getId());
-        assert account.getId() == 0;
+        assert account.getId() == 1;
         assert Objects.equals(account.getMoneyAmount(), defaultAmount);
 
         assert user.getAccountList().get(0) == account;
@@ -51,7 +52,7 @@ public class AccountTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void accountDeletionTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("3");
         Account account = user.getAccountList().get(0);
         int accountId = account.getId();
 
@@ -63,7 +64,7 @@ public class AccountTest {
 
     @Test
     public void accountDepositTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("44");
         Account account = user.getAccountList().get(0);
         Long amount = 1000L;
 
@@ -74,7 +75,7 @@ public class AccountTest {
 
     @Test
     public void accountWithdrawalTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("5");
         Account account = user.getAccountList().get(0);
         Long amount = 1000L;
 
@@ -86,7 +87,7 @@ public class AccountTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void accountWithdrawalExceptionTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("6");
         Account account = user.getAccountList().get(0);
         Long amount = defaultAmount + 1000L;
 
@@ -95,7 +96,7 @@ public class AccountTest {
 
     @Test
     public void oneUserAccountTransferTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("7");
         Account account1 = user.getAccountList().get(0);
         Account account2 = accountService.createAccount(user); // пустой, потому что только на первый аккаунт юзера поступают бонусные деньги
         accountService.transfer(account1, account2, defaultAmount);
@@ -105,8 +106,8 @@ public class AccountTest {
 
     @Test
     public void differentUserAccountTransferTest() {
-        User user = userService.createUser();
-        User user2 = userService.createUser();
+        User user = userService.createUser("8");
+        User user2 = userService.createUser("9");
         Account account1 = user.getAccountList().get(0);
         Account account2 = user2.getAccountList().get(0);
 
@@ -116,14 +117,14 @@ public class AccountTest {
 
     @Test
     public void getBalanceTest() {
-        User user = userService.createUser();
+        User user = userService.createUser("90");
         Account account = user.getAccountList().get(0);
         assert Objects.equals(account.getMoneyAmount(), defaultAmount);
     }
 
     @Test
     public void noBonusMoneyOnSecondAccount() {
-        User user = userService.createUser();
+        User user = userService.createUser("111");
         Account account2 = accountService.createAccount(user);
 
         assert user.getAccountList().size() == 2;

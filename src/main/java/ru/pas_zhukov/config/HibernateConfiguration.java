@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.pas_zhukov.entity.Account;
+import ru.pas_zhukov.entity.User;
 
 @Configuration
 public class HibernateConfiguration {
@@ -29,13 +31,15 @@ public class HibernateConfiguration {
 
         configuration
                 .addPackage("ru.pas_zhukov.entity")
-
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Account.class)
                 .setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
                 .setProperty("hibernate.connection.url", dbUrl)
                 .setProperty("hibernate.connection.username", dbUsername)
                 .setProperty("hibernate.connection.password", dbPassword)
                 .setProperty("hibernate.show_sql", showSql)
-                .setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
+                .setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto)
+                .setProperty("hibernate.current_session_context_class", "thread");
 
         return configuration.buildSessionFactory();
     }

@@ -1,9 +1,12 @@
 package ru.pas_zhukov.service;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
+import ru.pas_zhukov.util.TransactionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,37 +15,38 @@ import java.util.Objects;
 @Component
 public class AccountService {
 
-    private final UserService userService;
     private final AccountProperties accountProperties;
+    private final TransactionHelper transactionHelper;
+    private final SessionFactory sessionFactory;
 
-    private int idCounter = 0;
-
-    // Volume
-    private final List<Account> accounts = new ArrayList<>();
-
-    public AccountService(UserService userService, AccountProperties accountProperties) {
-        this.userService = userService;
+    public AccountService(AccountProperties accountProperties, TransactionHelper transactionHelper, SessionFactory sessionFactory) {
         this.accountProperties = accountProperties;
+        this.transactionHelper = transactionHelper;
+        this.sessionFactory = sessionFactory;
     }
 
     public Account createAccount(int userId) {
-        Account account = new Account(idCounter, userId,
-                userService.getUserById(userId).getAccountList().isEmpty() ? accountProperties.getDefaultAmount() : 0);
-        idCounter++;
-        accounts.add(account);
-        userService.getUserById(userId).addAccount(account);
-        return account;
+        User user;
+        try (Session session = sessionFactory.getCurrentSession()) { // TODO: лучше бы вызывать сервис...
+            user = session.get(User.class, userId);
+        }
+        return createAccount(user);
     }
 
     public Account createAccount(User user) {
-        return this.createAccount(user.getId());
+        return transactionHelper.executeInTransaction(() -> {
+            Session session = sessionFactory.getCurrentSession();
+            Account account = new Account(user,
+                    user.getAccountList().isEmpty() ? accountProperties.getDefaultAmount() : 0);
+            session.persist(account);
+            return account;
+        });
     }
 
     public Account getAccountById(int id) {
-        return accounts.stream()
-                .filter(account -> account.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Account with id " + id + " not found"));
+           Session session = sessionFactory.getCurrentSession();
+            return session.get(Account.class, id);
+//                new IllegalArgumentException("Account with id " + id + " not found"));
     }
 
     public void deposit(Account account, Long amount) {
@@ -88,8 +92,11 @@ public class AccountService {
 
 
     public void deleteAccount(Account account) {
-        userService.getUserById(account.getUserId()).removeAccount(account);
-        accounts.remove(account);
+        Session session = sessionFactory.getCurrentSession();
+        transactionHelper.executeInTransaction(() -> {
+            session.remove(account);
+            return account;
+        });
     }
 
     public void deleteAccount(int accountId) {
