@@ -19,7 +19,7 @@ public class OperationsConsoleListener extends Thread {
 
     public void run(){
         while (true){
-            System.out.println("Enter one of the following commands: ");
+            System.out.println("\nEnter one of the following commands: ");
             System.out.println(Arrays.toString(ConsoleOperationType.values()));
             System.out.println("\n");
             try {

@@ -42,7 +42,7 @@ public class AccountService {
                 Session session = sessionFactory.getCurrentSession();
                 return session.createQuery("SELECT a FROM Account a WHERE a.id=:id", Account.class).setParameter("id", id).getSingleResult();
             } catch (NoResultException e) {
-                throw new IllegalArgumentException("Account with id " + id + " not found");
+                throw new IllegalArgumentException("Account with id " + id + " not found.");
             }
         });
     }
