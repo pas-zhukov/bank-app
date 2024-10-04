@@ -31,7 +31,7 @@ public class UserService {
             if (session.createQuery("SELECT u FROM User u WHERE u.login=:login", User.class).setParameter("login", username).uniqueResult() != null) {
                 throw new IllegalArgumentException("User with login " + username + " already exists. Please choose another username.");
             }
-            User user = new User(username);
+            User user = User.builder().withUsername(username).build();
             session.persist(user);
             accountService.createAccount(user);
             session.flush();

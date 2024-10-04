@@ -1,6 +1,7 @@
 package ru.pas_zhukov.entity;
 
 import jakarta.persistence.*;
+import ru.pas_zhukov.entity.builder.UserBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,25 +12,25 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "login", unique = true, nullable = false)
     private String login;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accountList = new ArrayList<>();
+    private List<Account> accountList;
 
     public User() {
     }
 
-    public User(String login) {
-        this.login = login;
-    }
-
-    public User(int id, String login, List<Account> accountList) {
+    public User(Integer id, String login, List<Account> accountList) {
         this.id = id;
         this.login = login;
         this.accountList = accountList;
+    }
+
+    public static UserBuilder builder() {
+        return new UserBuilder();
     }
 
     public void addAccount(Account account) {

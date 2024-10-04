@@ -2,6 +2,7 @@ package ru.pas_zhukov.entity;
 
 
 import jakarta.persistence.*;
+import ru.pas_zhukov.entity.builder.AccountBuilder;
 
 @Entity
 @Table(name = "accounts")
@@ -22,15 +23,14 @@ public class Account {
 
     }
 
-    public Account(User user, Long moneyAmount) {
-        this.user = user;
-        this.moneyAmount = moneyAmount;
-    }
-
     public Account(Integer id, User user, Long moneyAmount) {
         this.id = id;
         this.user = user;
         this.moneyAmount = moneyAmount;
+    }
+
+    public static AccountBuilder builder() {
+        return new AccountBuilder();
     }
 
     public void setId(Integer id) {

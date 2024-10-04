@@ -9,8 +9,6 @@ import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.util.TransactionHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -29,8 +27,10 @@ public class AccountService {
     public Account createAccount(User user) {
         return transactionHelper.executeInTransaction(() -> {
             Session session = sessionFactory.getCurrentSession();
-            Account account = new Account(user,
-                    user.getAccountList().isEmpty() ? accountProperties.getDefaultAmount() : 0);
+            Account account = Account.builder()
+                    .withUser(user)
+                    .withMoneyAmount(user.getAccountList().isEmpty() ? accountProperties.getDefaultAmount() : 0)
+                    .build();
             session.persist(account);
             return account;
         });
