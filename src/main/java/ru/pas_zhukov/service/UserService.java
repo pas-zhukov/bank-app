@@ -3,9 +3,7 @@ package ru.pas_zhukov.service;
 import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.pas_zhukov.config.HibernateConfiguration;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.util.TransactionHelper;
 

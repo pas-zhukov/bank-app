@@ -1,6 +1,5 @@
 package ru.pas_zhukov.entity.builder;
 
-import org.springframework.stereotype.Component;
 import ru.pas_zhukov.entity.User;
 
 import java.util.ArrayList;

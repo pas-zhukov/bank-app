@@ -3,7 +3,6 @@ package ru.pas_zhukov.unit;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.Account;
@@ -12,7 +11,6 @@ import ru.pas_zhukov.service.AccountService;
 import ru.pas_zhukov.service.UserService;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public class AccountTest {
 
@@ -62,7 +60,7 @@ public class AccountTest {
         user = userService.getUserById(user.getId());
 
         Assert.assertTrue(user.getAccountList().isEmpty());
-        Account deletedAccount = accountService.getAccountById(accountId);
+        accountService.getAccountById(accountId);
     }
 
     @Test

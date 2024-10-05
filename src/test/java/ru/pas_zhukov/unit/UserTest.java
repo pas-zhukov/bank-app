@@ -3,7 +3,6 @@ package ru.pas_zhukov.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pas_zhukov.config.AccountProperties;
 import ru.pas_zhukov.entity.User;
@@ -60,8 +59,8 @@ public class UserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void userLoginNotUniqueTest() {
-        User user = context.getBean(UserService.class).createUser("user");
-        User user2 = context.getBean(UserService.class).createUser("user");
+        context.getBean(UserService.class).createUser("user");
+        context.getBean(UserService.class).createUser("user");
     }
 
     @Test

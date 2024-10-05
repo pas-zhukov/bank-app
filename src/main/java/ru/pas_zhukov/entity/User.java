@@ -3,7 +3,6 @@ package ru.pas_zhukov.entity;
 import jakarta.persistence.*;
 import ru.pas_zhukov.entity.builder.UserBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
