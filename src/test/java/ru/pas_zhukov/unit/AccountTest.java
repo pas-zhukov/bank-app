@@ -38,9 +38,9 @@ public class AccountTest {
         User user = userService.createUser("2");
         Account account = user.getAccountList().get(0);
 
-        assert account!= null;
+        assert account != null;
         assert account.getId() != null;
-        assert account.getUserId()!= null;
+        assert account.getUserId() != null;
         assert account.getMoneyAmount() != null;
 
         assert Objects.equals(account.getUserId(), user.getId());
@@ -113,7 +113,7 @@ public class AccountTest {
         Account account2 = user2.getAccountList().get(0);
 
         accountService.transfer(account1, account2, defaultAmount);
-        assert Objects.equals(account2.getMoneyAmount(), defaultAmount + (long) (defaultAmount*(1 - transferCommission)));
+        assert Objects.equals(account2.getMoneyAmount(), defaultAmount + (long) (defaultAmount * (1 - transferCommission)));
     }
 
     @Test

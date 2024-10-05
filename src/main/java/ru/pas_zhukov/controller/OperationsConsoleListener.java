@@ -12,13 +12,13 @@ public class OperationsConsoleListener extends Thread {
     private final InputScanner inputScanner;
     private final Map<ConsoleOperationType, OperationCommand> commands = new HashMap<>();
 
-    public OperationsConsoleListener(InputScanner inputScanner, List<OperationCommand>commands) {
+    public OperationsConsoleListener(InputScanner inputScanner, List<OperationCommand> commands) {
         this.inputScanner = inputScanner;
         commands.forEach(command -> this.commands.put(command.getOperationType(), command));
     }
 
-    public void run(){
-        while (true){
+    public void run() {
+        while (true) {
             System.out.println("\nEnter one of the following commands: ");
             System.out.println(Arrays.toString(ConsoleOperationType.values()));
             System.out.println("\n");

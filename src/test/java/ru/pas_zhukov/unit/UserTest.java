@@ -37,7 +37,7 @@ public class UserTest {
 
     @Test
     public void usersHaveUniqueIdTest() {
-        IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser("user" + e));
+        IntStream.range(0, 10).forEach(e -> context.getBean(UserService.class).createUser("user" + e));
         List<User> users = context.getBean(UserService.class).getAllUsers();
         Set<Integer> ids = users.stream().map(User::getId).collect(Collectors.toSet());
         assert ids.size() == 10;
@@ -45,14 +45,14 @@ public class UserTest {
 
     @Test
     public void getAllUsersTest() {
-        IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser("user" + e));
+        IntStream.range(0, 10).forEach(e -> context.getBean(UserService.class).createUser("user" + e));
         List<User> users = context.getBean(UserService.class).getAllUsers();
         assert users.size() == 10;
     }
 
     @Test
     public void getUserByIdTest() {
-        IntStream.range(0, 10).forEach( e -> context.getBean(UserService.class).createUser("user2" + e));
+        IntStream.range(0, 10).forEach(e -> context.getBean(UserService.class).createUser("user2" + e));
         User user = context.getBean(UserService.class).getUserById(5);
         assert user.getId() == 5;
     }

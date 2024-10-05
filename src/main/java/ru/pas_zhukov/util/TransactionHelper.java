@@ -17,7 +17,7 @@ public class TransactionHelper {
         this.sessionFactory = sessionFactory;
     }
 
-    public<T> T executeInTransaction(Supplier<T> action) {
+    public <T> T executeInTransaction(Supplier<T> action) {
         Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.getTransaction();
         // если транзакция уже не в статусе NOT_ACTIVE

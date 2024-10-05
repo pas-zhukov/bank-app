@@ -83,17 +83,17 @@ public class AccountService {
 
     public void transfer(Account from, Account to, Long amount) {
         transactionHelper.executeInTransaction(() -> {
-        if (from.getMoneyAmount() < amount) {
-            throwNotEnoughMoneyException(from, amount);
-        }
-        double coefficient = 1.d;
-        if (!Objects.equals(from.getUserId(), to.getUserId())) {
-            coefficient = (1.d - accountProperties.getTransferCommission());
-        }
-        from.withdrawMoney(amount);
-        long moneyToDeposit = (long) (amount * coefficient);
-        to.depositMoney(moneyToDeposit);
-        return 0;
+            if (from.getMoneyAmount() < amount) {
+                throwNotEnoughMoneyException(from, amount);
+            }
+            double coefficient = 1.d;
+            if (!Objects.equals(from.getUserId(), to.getUserId())) {
+                coefficient = (1.d - accountProperties.getTransferCommission());
+            }
+            from.withdrawMoney(amount);
+            long moneyToDeposit = (long) (amount * coefficient);
+            to.depositMoney(moneyToDeposit);
+            return 0;
         });
     }
 

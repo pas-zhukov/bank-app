@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.util.TransactionHelper;
 
-import java.util.*;
+import java.util.List;
 
 @Component
 public class UserService {
