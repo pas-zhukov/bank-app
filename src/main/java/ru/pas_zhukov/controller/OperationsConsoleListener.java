@@ -28,6 +28,8 @@ public class OperationsConsoleListener extends Thread {
                 operation.execute();
             } catch (IllegalArgumentException ex) {
                 System.out.print(ex.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Unexpected error: " + ex.getMessage());
             }
         }
     }
