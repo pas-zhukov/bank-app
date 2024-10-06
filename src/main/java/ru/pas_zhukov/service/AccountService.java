@@ -49,18 +49,19 @@ public class AccountService {
 
     public Account deposit(int accountId, Long amount) {
         return transactionHelper.executeInTransaction(() -> {
+            if (amount <= 0L) {
+                throw new IllegalArgumentException("Money amount must be a positive number.");
+            }
             Account account = getAccountByIdOrThrow(accountId);
             account.depositMoney(amount);
             return account;
         });
     }
 
-    public Account withdraw(int accountId, Long amount) {
-        return transactionHelper.executeInTransaction(() -> {
+    public void withdraw(int accountId, Long amount) {
+        transactionHelper.executeInTransaction(() -> {
             Account account = getAccountByIdOrThrow(accountId);
-            if (account.getMoneyAmount() < amount) {
-                throwNotEnoughMoneyException(account, amount);
-            }
+            validateMoneyAmount(account, amount);
             account.withdrawMoney(amount);
             return account;
         });
@@ -70,9 +71,7 @@ public class AccountService {
         transactionHelper.executeInTransaction(() -> {
             Account from = getAccountByIdOrThrow(fromId);
             Account to = getAccountByIdOrThrow(toId);
-            if (from.getMoneyAmount() < amount) {
-                throwNotEnoughMoneyException(from, amount);
-            }
+            validateMoneyAmount(from, amount);
             double coefficient = 1.d;
             if (!Objects.equals(from.getUserId(), to.getUserId())) {
                 coefficient = (1.d - accountProperties.getTransferCommission());
@@ -88,15 +87,20 @@ public class AccountService {
     public void deleteAccount(int accountId) {
         transactionHelper.executeInTransaction(() -> {
             Session session = sessionFactory.getCurrentSession();
-            Account accountToDelete = getAccountByIdOrThrow(accountId);
+            getAccountByIdOrThrow(accountId);
             session.createQuery("DELETE FROM Account a WHERE a.id=:id", Void.class).setParameter("id", accountId).executeUpdate();
             return 0;
         });
     }
 
-    private void throwNotEnoughMoneyException(Account account, Long amount) {
-        throw new IllegalArgumentException("Not enough money on account with id " + account.getId() + ". " +
-                "You requested " + amount + ", " +
-                "but there is only " + account.getMoneyAmount() + " on account.");
+    private void validateMoneyAmount(Account account, Long amount) throws IllegalArgumentException {
+        if (amount <= 0L) {
+            throw new IllegalArgumentException("Money amount must be a positive number.");
+        }
+        if (account.getMoneyAmount() < amount) {
+            throw new IllegalArgumentException("Not enough money on account with id " + account.getId() + ". " +
+                    "You requested " + amount + ", " +
+                    "but there is only " + account.getMoneyAmount() + " on account.");
+        }
     }
 }
