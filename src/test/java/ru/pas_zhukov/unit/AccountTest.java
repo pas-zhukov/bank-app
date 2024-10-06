@@ -69,7 +69,7 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         Long amount = 1000L;
 
-        accountService.deposit(account, amount);
+        accountService.deposit(account.getId(), amount);
 
         assert Objects.equals(account.getMoneyAmount(), defaultAmount + amount);
     }
@@ -80,8 +80,8 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         Long amount = 1000L;
 
-        accountService.deposit(account, amount);
-        accountService.withdraw(account, amount);
+        accountService.deposit(account.getId(), amount);
+        accountService.withdraw(account.getId(), amount);
 
         assert Objects.equals(account.getMoneyAmount(), defaultAmount);
     }
@@ -92,7 +92,7 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         Long amount = defaultAmount + 1000L;
 
-        accountService.withdraw(account, amount);
+        accountService.withdraw(account.getId(), amount);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class AccountTest {
         User user = userService.createUser("7");
         Account account1 = user.getAccountList().get(0);
         Account account2 = accountService.createAccount(user); // пустой, потому что только на первый аккаунт юзера поступают бонусные деньги
-        accountService.transfer(account1, account2, defaultAmount);
+        accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
         assert Objects.equals(account1.getMoneyAmount(), 0L);
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount);
     }
@@ -112,7 +112,7 @@ public class AccountTest {
         Account account1 = user.getAccountList().get(0);
         Account account2 = user2.getAccountList().get(0);
 
-        accountService.transfer(account1, account2, defaultAmount);
+        accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount + (long) (defaultAmount * (1 - transferCommission)));
     }
 

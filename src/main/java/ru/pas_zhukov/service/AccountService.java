@@ -47,23 +47,17 @@ public class AccountService {
         });
     }
 
-    public void deposit(Account account, Long amount) {
+    public void deposit(int accountId, Long amount) {
         transactionHelper.executeInTransaction(() -> {
+            Account account = getAccountById(accountId);
             account.depositMoney(amount);
             return 0;
         });
     }
 
-    public void deposit(int accountId, Long amount) {
+    public void withdraw(int accountId, Long amount) {
         transactionHelper.executeInTransaction(() -> {
             Account account = getAccountById(accountId);
-            deposit(account, amount);
-            return 0;
-        });
-    }
-
-    public void withdraw(Account account, Long amount) {
-        transactionHelper.executeInTransaction(() -> {
             if (account.getMoneyAmount() < amount) {
                 throwNotEnoughMoneyException(account, amount);
             }
@@ -72,17 +66,10 @@ public class AccountService {
         });
     }
 
-    public void withdraw(int accountId, Long amount) {
+    public void transfer(int fromId, int toId, Long amount) {
         transactionHelper.executeInTransaction(() -> {
-            Account account = getAccountById(accountId);
-            withdraw(account, amount);
-            return 0;
-        });
-    }
-
-
-    public void transfer(Account from, Account to, Long amount) {
-        transactionHelper.executeInTransaction(() -> {
+            Account from = getAccountById(fromId);
+            Account to = getAccountById(toId);
             if (from.getMoneyAmount() < amount) {
                 throwNotEnoughMoneyException(from, amount);
             }
@@ -93,15 +80,6 @@ public class AccountService {
             from.withdrawMoney(amount);
             long moneyToDeposit = (long) (amount * coefficient);
             to.depositMoney(moneyToDeposit);
-            return 0;
-        });
-    }
-
-    public void transfer(int fromId, int toId, Long amount) {
-        transactionHelper.executeInTransaction(() -> {
-            Account from = getAccountById(fromId);
-            Account to = getAccountById(toId);
-            transfer(from, to, amount);
             return 0;
         });
     }
