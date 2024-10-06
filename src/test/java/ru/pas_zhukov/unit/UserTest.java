@@ -53,7 +53,7 @@ public class UserTest {
     @Test
     public void getUserByIdTest() {
         IntStream.range(0, 10).forEach(e -> context.getBean(UserService.class).createUser("user2" + e));
-        User user = context.getBean(UserService.class).getUserById(5);
+        User user = context.getBean(UserService.class).getUserByIdOrThrow(5);
         assert user.getId() == 5;
     }
 
@@ -72,7 +72,7 @@ public class UserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void notExistingUserTest() {
-        context.getBean(UserService.class).getUserById(9999);
+        context.getBean(UserService.class).getUserByIdOrThrow(9999);
     }
 
 }

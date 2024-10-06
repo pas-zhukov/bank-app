@@ -36,7 +36,7 @@ public class AccountService {
         });
     }
 
-    public Account getAccountById(int id) {
+    public Account getAccountByIdOrThrow(int id) throws IllegalArgumentException {
         return transactionHelper.executeInTransaction(() -> {
             try {
                 Session session = sessionFactory.getCurrentSession();
@@ -49,7 +49,7 @@ public class AccountService {
 
     public Account deposit(int accountId, Long amount) {
         return transactionHelper.executeInTransaction(() -> {
-            Account account = getAccountById(accountId);
+            Account account = getAccountByIdOrThrow(accountId);
             account.depositMoney(amount);
             return account;
         });
@@ -57,7 +57,7 @@ public class AccountService {
 
     public Account withdraw(int accountId, Long amount) {
         return transactionHelper.executeInTransaction(() -> {
-            Account account = getAccountById(accountId);
+            Account account = getAccountByIdOrThrow(accountId);
             if (account.getMoneyAmount() < amount) {
                 throwNotEnoughMoneyException(account, amount);
             }
@@ -68,8 +68,8 @@ public class AccountService {
 
     public void transfer(int fromId, int toId, Long amount) {
         transactionHelper.executeInTransaction(() -> {
-            Account from = getAccountById(fromId);
-            Account to = getAccountById(toId);
+            Account from = getAccountByIdOrThrow(fromId);
+            Account to = getAccountByIdOrThrow(toId);
             if (from.getMoneyAmount() < amount) {
                 throwNotEnoughMoneyException(from, amount);
             }
@@ -88,7 +88,7 @@ public class AccountService {
     public void deleteAccount(int accountId) {
         transactionHelper.executeInTransaction(() -> {
             Session session = sessionFactory.getCurrentSession();
-            Account accountToDelete = getAccountById(accountId);
+            Account accountToDelete = getAccountByIdOrThrow(accountId);
             session.createQuery("DELETE FROM Account a WHERE a.id=:id", Void.class).setParameter("id", accountId).executeUpdate();
             return 0;
         });

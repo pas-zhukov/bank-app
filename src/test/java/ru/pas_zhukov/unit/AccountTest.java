@@ -57,10 +57,10 @@ public class AccountTest {
         int accountId = account.getId();
 
         accountService.deleteAccount(accountId);
-        user = userService.getUserById(user.getId());
+        user = userService.getUserByIdOrThrow(user.getId());
 
         Assert.assertTrue(user.getAccountList().isEmpty());
-        accountService.getAccountById(accountId);
+        accountService.getAccountByIdOrThrow(accountId);
     }
 
     @Test
@@ -101,8 +101,8 @@ public class AccountTest {
         Account account1 = user.getAccountList().get(0);
         Account account2 = accountService.createAccount(user); // пустой, потому что только на первый аккаунт юзера поступают бонусные деньги
         accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
-        account1 = accountService.getAccountById(account1.getId());
-        account2 = accountService.getAccountById(account2.getId());
+        account1 = accountService.getAccountByIdOrThrow(account1.getId());
+        account2 = accountService.getAccountByIdOrThrow(account2.getId());
         assert Objects.equals(account1.getMoneyAmount(), 0L);
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount);
     }
@@ -115,7 +115,7 @@ public class AccountTest {
         Account account2 = user2.getAccountList().get(0);
 
         accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
-        account2 = accountService.getAccountById(account2.getId());
+        account2 = accountService.getAccountByIdOrThrow(account2.getId());
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount + (long) (defaultAmount * (1 - transferCommission)));
     }
 
@@ -130,7 +130,7 @@ public class AccountTest {
     public void noBonusMoneyOnSecondAccount() {
         User user = userService.createUser("111");
         Account account2 = accountService.createAccount(user);
-        user = userService.getUserById(user.getId()); // ?
+        user = userService.getUserByIdOrThrow(user.getId()); // ?
         Assert.assertEquals(2, user.getAccountList().size());
         Assert.assertEquals(Long.valueOf(0L), account2.getMoneyAmount());
     }
@@ -138,7 +138,7 @@ public class AccountTest {
     @Test
     public void getAccountById() {
         User user = userService.createUser("1213");
-        Account account = accountService.getAccountById(user.getAccountList().get(0).getId());
+        Account account = accountService.getAccountByIdOrThrow(user.getAccountList().get(0).getId());
         Assert.assertNotNull(account);
     }
 

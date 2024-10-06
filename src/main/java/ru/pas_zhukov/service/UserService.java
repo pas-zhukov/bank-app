@@ -38,7 +38,7 @@ public class UserService {
         });
     }
 
-    public User getUserById(int id) {
+    public User getUserByIdOrThrow(int id) throws IllegalArgumentException {
         return transactionHelper.executeInTransaction(() -> {
             try {
                 Session session = sessionFactory.getCurrentSession();
