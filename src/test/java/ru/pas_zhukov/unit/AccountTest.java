@@ -51,7 +51,7 @@ public class AccountTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void accountDeletionTest() {
+    public void lastAccountDeletionTest() {
         User user = userService.createUser("3");
         Account account = user.getAccountList().get(0);
         int accountId = account.getId();
@@ -60,7 +60,6 @@ public class AccountTest {
         user = userService.getUserByIdOrThrow(user.getId());
 
         Assert.assertTrue(user.getAccountList().isEmpty());
-        accountService.getAccountByIdOrThrow(accountId);
     }
 
     @Test
