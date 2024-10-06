@@ -47,22 +47,22 @@ public class AccountService {
         });
     }
 
-    public void deposit(int accountId, Long amount) {
-        transactionHelper.executeInTransaction(() -> {
+    public Account deposit(int accountId, Long amount) {
+        return transactionHelper.executeInTransaction(() -> {
             Account account = getAccountById(accountId);
             account.depositMoney(amount);
-            return 0;
+            return account;
         });
     }
 
-    public void withdraw(int accountId, Long amount) {
-        transactionHelper.executeInTransaction(() -> {
+    public Account withdraw(int accountId, Long amount) {
+        return transactionHelper.executeInTransaction(() -> {
             Account account = getAccountById(accountId);
             if (account.getMoneyAmount() < amount) {
                 throwNotEnoughMoneyException(account, amount);
             }
             account.withdrawMoney(amount);
-            return 0;
+            return account;
         });
     }
 

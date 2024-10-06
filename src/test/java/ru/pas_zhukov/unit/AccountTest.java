@@ -69,7 +69,7 @@ public class AccountTest {
         Account account = user.getAccountList().get(0);
         Long amount = 1000L;
 
-        accountService.deposit(account.getId(), amount);
+        account = accountService.deposit(account.getId(), amount);
 
         assert Objects.equals(account.getMoneyAmount(), defaultAmount + amount);
     }
@@ -101,6 +101,8 @@ public class AccountTest {
         Account account1 = user.getAccountList().get(0);
         Account account2 = accountService.createAccount(user); // пустой, потому что только на первый аккаунт юзера поступают бонусные деньги
         accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
+        account1 = accountService.getAccountById(account1.getId());
+        account2 = accountService.getAccountById(account2.getId());
         assert Objects.equals(account1.getMoneyAmount(), 0L);
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount);
     }
@@ -113,6 +115,7 @@ public class AccountTest {
         Account account2 = user2.getAccountList().get(0);
 
         accountService.transfer(account1.getId(), account2.getId(), defaultAmount);
+        account2 = accountService.getAccountById(account2.getId());
         assert Objects.equals(account2.getMoneyAmount(), defaultAmount + (long) (defaultAmount * (1 - transferCommission)));
     }
 
