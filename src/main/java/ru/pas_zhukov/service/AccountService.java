@@ -9,6 +9,7 @@ import ru.pas_zhukov.entity.Account;
 import ru.pas_zhukov.entity.User;
 import ru.pas_zhukov.util.TransactionHelper;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -61,7 +62,7 @@ public class AccountService {
     public void withdraw(int accountId, Long amount) {
         transactionHelper.executeInTransaction(() -> {
             Account account = getAccountByIdOrThrow(accountId);
-            validateMoneyAmount(account, amount);
+            validateMoneyAmountWithdrawal(account, amount);
             account.withdrawMoney(amount);
             return account;
         });
@@ -71,7 +72,7 @@ public class AccountService {
         transactionHelper.executeInTransaction(() -> {
             Account from = getAccountByIdOrThrow(fromId);
             Account to = getAccountByIdOrThrow(toId);
-            validateMoneyAmount(from, amount);
+            validateMoneyAmountWithdrawal(from, amount);
             double coefficient = 1.d;
             if (!Objects.equals(from.getUserId(), to.getUserId())) {
                 coefficient = (1.d - accountProperties.getTransferCommission());
@@ -87,13 +88,30 @@ public class AccountService {
     public void deleteAccount(int accountId) {
         transactionHelper.executeInTransaction(() -> {
             Session session = sessionFactory.getCurrentSession();
-            getAccountByIdOrThrow(accountId);
+            Account accountToClose = getAccountByIdOrThrow(accountId);
+            List<Account> userAccounts = getAllUsersAccountsByUserId(accountToClose.getUserId());
+            Account otherUsersAccount = userAccounts.stream()
+                    .filter(a -> !Objects.equals(a.getId(), accountToClose.getId()))
+                    .findAny()
+                    .orElseThrow(() -> new IllegalArgumentException("Can't delete the last one account."));
+            if (accountToClose.getMoneyAmount() > 0) {
+                Long amount = accountToClose.getMoneyAmount();
+                accountToClose.withdrawMoney(amount);
+                otherUsersAccount.depositMoney(amount);
+            }
             session.createQuery("DELETE FROM Account a WHERE a.id=:id", Void.class).setParameter("id", accountId).executeUpdate();
             return 0;
         });
     }
 
-    private void validateMoneyAmount(Account account, Long amount) throws IllegalArgumentException {
+    public List<Account> getAllUsersAccountsByUserId(int id) {
+        return transactionHelper.executeInTransaction(() -> {
+            Session session = sessionFactory.getCurrentSession();
+            return session.createQuery("SELECT a FROM Account a WHERE a.user.id=:user_id", Account.class).setParameter("user_id", id).list();
+        });
+    }
+
+    private void validateMoneyAmountWithdrawal(Account account, Long amount) throws IllegalArgumentException {
         if (amount <= 0L) {
             throw new IllegalArgumentException("Money amount must be a positive number.");
         }
