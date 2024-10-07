@@ -1,0 +1,30 @@
+services:
+  database:
+    container_name: "postgres-db"
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      DATABASE_URL: jdbc:postgresql://postgres-db:5432/postgres
+    volumes:
+      - ./bank-app-db:/var/lib/bank-app-db
+    ports:
+      - "5432:5432"
+
+#  bank-app:
+#    build: .
+#    stdin_open: true  # Открыть стандартный ввод
+#    tty: true         # Включить поддержку псевдо-терминала
+#    container_name: "bank-app"
+#    restart: always
+#    depends_on:
+#      - database
+#    environment:
+#      DB_URL: jdbc:postgresql://postgres-db:5432/postgres
+#      DB_USER: postgres
+#      DB_PASSWORD: 12345
+#      DDL_AUTO: create-drop
+#    ports:
+#      - "8080:8080"

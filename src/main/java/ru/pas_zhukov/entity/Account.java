@@ -1,27 +1,64 @@
 package ru.pas_zhukov.entity;
 
 
+import jakarta.persistence.*;
+import ru.pas_zhukov.entity.builder.AccountBuilder;
+
+@Entity
+@Table(name = "accounts")
 public class Account {
-    private final int id;
-    private final int userId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "money_amount")
     private Long moneyAmount;
 
-    public Account(int id, int userId, Long moneyAmount) {
+    public Account() {
+
+    }
+
+    public Account(Integer id, User user, Long moneyAmount) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.moneyAmount = moneyAmount;
+    }
+
+    public static AccountBuilder builder() {
+        return new AccountBuilder();
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
         return id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Integer getUserId() {
-        return userId;
+        return user.getId();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getMoneyAmount() {
         return moneyAmount;
+    }
+
+    public void setMoneyAmount(Long moneyAmount) {
+        this.moneyAmount = moneyAmount;
     }
 
     public void depositMoney(Long moneyAmount) {
@@ -36,7 +73,7 @@ public class Account {
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", userId=" + user.getId() +
                 ", moneyAmount=" + moneyAmount +
                 '}';
     }

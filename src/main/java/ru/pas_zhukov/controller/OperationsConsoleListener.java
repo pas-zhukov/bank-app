@@ -12,14 +12,14 @@ public class OperationsConsoleListener extends Thread {
     private final InputScanner inputScanner;
     private final Map<ConsoleOperationType, OperationCommand> commands = new HashMap<>();
 
-    public OperationsConsoleListener(InputScanner inputScanner, List<OperationCommand>commands) {
+    public OperationsConsoleListener(InputScanner inputScanner, List<OperationCommand> commands) {
         this.inputScanner = inputScanner;
         commands.forEach(command -> this.commands.put(command.getOperationType(), command));
     }
 
-    public void run(){
-        while (true){
-            System.out.println("Enter one of the following commands: ");
+    public void run() {
+        while (true) {
+            System.out.println("\nEnter one of the following commands: ");
             System.out.println(Arrays.toString(ConsoleOperationType.values()));
             System.out.println("\n");
             try {
@@ -28,6 +28,8 @@ public class OperationsConsoleListener extends Thread {
                 operation.execute();
             } catch (IllegalArgumentException ex) {
                 System.out.print(ex.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Unexpected error: " + ex.getMessage());
             }
         }
     }
